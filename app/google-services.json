@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "80023720198",
+    "project_id": "composebookreaderapp",
+    "storage_bucket": "composebookreaderapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80023720198:android:0f7ba296ccf7ba309b0e87",
+        "android_client_info": {
+          "package_name": "com.neo.composebookreaderapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "80023720198-hfs9q364e2k8hgl32h4aabvtine2ctvh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyj4ByHYyKIbyLljwvTAyoF-y2MNvEZGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "80023720198-hfs9q364e2k8hgl32h4aabvtine2ctvh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
