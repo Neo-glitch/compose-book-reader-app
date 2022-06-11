@@ -31,15 +31,19 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.neo.composebookreaderapp.R
 import com.neo.composebookreaderapp.components.EmailInput
 import com.neo.composebookreaderapp.components.PasswordInput
 import com.neo.composebookreaderapp.components.ReaderLogo
+import com.neo.composebookreaderapp.navigation.ReaderScreens
 
 @ExperimentalComposeUiApi
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavHostController,
+                loginViewModel: ReaderLoginScreenViewModel = viewModel()
+) {
 
     // if true show login form else, create account form
     val showLoginForm = rememberSaveable { mutableStateOf(true) }
@@ -54,13 +58,16 @@ fun LoginScreen(navController: NavHostController) {
 
             if (showLoginForm.value)
                 UserForm(loading = false, isCreateAccount = false) { email, password ->
-                    TODO("login firebase user in")
                     Log.d("Form", "Logging with $email")
+                    loginViewModel.signInWithEmailAndPassword(email.trim(), password.trim()){
+                        navController.navigate(route = ReaderScreens.ReaderHomeScreen.name)
+                    }
                 }
             else
                 UserForm(loading = false, isCreateAccount = true){email, password ->
-                    TODO("create account on firebase")
-                    Log.d("Form", "signup with $email")
+                    loginViewModel.createUserWithEmailAndPassword(email.trim(), password.trim()){
+                        navController.navigate(ReaderScreens.ReaderHomeScreen.name)
+                    }
                 }
 
             Spacer(modifier = Modifier.height(15.dp))

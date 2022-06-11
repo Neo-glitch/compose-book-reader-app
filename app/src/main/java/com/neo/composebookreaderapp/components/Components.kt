@@ -1,15 +1,13 @@
 package com.neo.composebookreaderapp.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
@@ -34,14 +32,16 @@ fun ReaderLogo(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun EmailInput(modifier: Modifier = Modifier,
-               emailState: MutableState<String>,
-               labelId: String = "Email",
-               enabled: Boolean = true,
-               imeAction: ImeAction = ImeAction.Next,
-               onAction: KeyboardActions = KeyboardActions.Default
-){
-    InputField(modifier = Modifier, valueState = emailState,
+fun EmailInput(
+    modifier: Modifier = Modifier,
+    emailState: MutableState<String>,
+    labelId: String = "Email",
+    enabled: Boolean = true,
+    imeAction: ImeAction = ImeAction.Next,
+    onAction: KeyboardActions = KeyboardActions.Default
+) {
+    InputField(
+        modifier = Modifier, valueState = emailState,
         labelId = labelId, enabled = enabled,
         keyboardType = KeyboardType.Email,
         imeAction = imeAction,
@@ -62,11 +62,12 @@ fun InputField(
     onAction: KeyboardActions = KeyboardActions.Default
 ) {
 
-    OutlinedTextField(value = valueState.value,
-        onValueChange = {valueState.value = it},
-        label = {Text(text = labelId)},
+    OutlinedTextField(
+        value = valueState.value,
+        onValueChange = { valueState.value = it },
+        label = { Text(text = labelId) },
         singleLine = isSingleLine,
-        textStyle = TextStyle(fontSize = 18.sp, color = MaterialTheme.colors.onBackground ),
+        textStyle = TextStyle(fontSize = 18.sp, color = MaterialTheme.colors.onBackground),
         modifier = modifier
             .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
             .fillMaxWidth(),
@@ -87,11 +88,12 @@ fun PasswordInput(
     imeAction: ImeAction = ImeAction.Done,
     onAction: KeyboardActions = KeyboardActions.Default
 ) {
-    val visualTransformation = if(passwordVisibility.value) VisualTransformation.None else
+    val visualTransformation = if (passwordVisibility.value) VisualTransformation.None else
         PasswordVisualTransformation()  // is password text meant to be hidden use **** characters
 
-    OutlinedTextField(value = passwordState.value, onValueChange = { passwordState.value = it},
-        label = { Text(text = labelId)},
+    OutlinedTextField(
+        value = passwordState.value, onValueChange = { passwordState.value = it },
+        label = { Text(text = labelId) },
         singleLine = true,
         textStyle = TextStyle(fontSize = 18.sp, color = MaterialTheme.colors.onBackground),
         modifier = modifier
@@ -114,10 +116,8 @@ fun PasswordInput(
 fun PasswordVisibility(passwordVisibility: MutableState<Boolean>) {
     val visible = passwordVisibility.value
 
-    // toggles password visibility
-    IconButton(onClick = {
-        passwordVisibility.value = !visible
-    }) {
-        Icons.Default.Close
-    }
+    Icon(Icons.Filled.Info, "password_toggle",
+        modifier = Modifier.clickable {
+            passwordVisibility.value = !visible
+        })
 }

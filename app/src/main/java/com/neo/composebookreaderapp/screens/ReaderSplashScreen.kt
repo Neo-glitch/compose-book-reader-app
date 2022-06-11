@@ -20,6 +20,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.neo.composebookreaderapp.components.ReaderLogo
 import com.neo.composebookreaderapp.navigation.ReaderScreens
 import kotlinx.coroutines.delay
@@ -33,14 +35,18 @@ fun ReaderSplashScreen(navController: NavHostController) {
     }
 
     LaunchedEffect(key1 = true) {
-        scale.animateTo(targetValue = 0.9f,
+        scale.animateTo(
+            targetValue = 0.9f,
             animationSpec = tween(durationMillis = 800, easing = {
                 OvershootInterpolator(8f).getInterpolation(it)
             })
         )
 
         delay(2000L)
-        navController.navigate(ReaderScreens.LoginScreen.name)
+
+        val route = if (Firebase.auth.currentUser?.email.isNullOrEmpty())
+            ReaderScreens.LoginScreen.name else ReaderScreens.ReaderHomeScreen.name
+        navController.navigate(route)
     }
 
     Surface(
