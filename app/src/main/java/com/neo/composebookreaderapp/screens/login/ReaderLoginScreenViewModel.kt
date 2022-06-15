@@ -23,7 +23,7 @@ class ReaderLoginScreenViewModel: ViewModel() {
     private val _loading = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loading
 
-    fun signInWithEmailAndPassword(email: String, password: String, home: () -> Unit){
+    fun signInWithEmailAndPassword(email: String, password: String, home: () -> Unit)=
         viewModelScope.launch {
             // don't know why coroutine is used since firebase tasks run in background already
             // just following along though
@@ -43,8 +43,6 @@ class ReaderLoginScreenViewModel: ViewModel() {
                 Log.d("SignIn error", "SignIn failed : ${e.message}")
             }
         }
-
-    }
 
     fun createUserWithEmailAndPassword(email: String, password: String, home: () -> Unit){
         if(_loading.value == false){

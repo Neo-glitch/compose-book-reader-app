@@ -2,9 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.neo.composebookreaderapp">
 
+    <!-- use clear text traffic allows android studio to make calls to less secure http traffic(not to be used in production app) -->
     <application
         android:allowBackup="true"
         android:name=".ComposeReaderApplication"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"

@@ -102,4 +102,7 @@ dependencies {
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
     kapt "androidx.hilt:hilt-compiler:1.0.0"
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0-alpha03"
+
+    // for more compose icons(affects build time to, add only when needed)
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
 }

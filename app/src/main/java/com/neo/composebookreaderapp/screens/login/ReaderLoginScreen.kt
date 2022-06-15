@@ -59,13 +59,13 @@ fun LoginScreen(navController: NavHostController,
             if (showLoginForm.value)
                 UserForm(loading = false, isCreateAccount = false) { email, password ->
                     Log.d("Form", "Logging with $email")
-                    loginViewModel.signInWithEmailAndPassword(email.trim(), password.trim()){
+                    loginViewModel.signInWithEmailAndPassword(email, password){
                         navController.navigate(route = ReaderScreens.ReaderHomeScreen.name)
                     }
                 }
             else
                 UserForm(loading = false, isCreateAccount = true){email, password ->
-                    loginViewModel.createUserWithEmailAndPassword(email.trim(), password.trim()){
+                    loginViewModel.createUserWithEmailAndPassword(email, password){
                         navController.navigate(ReaderScreens.ReaderHomeScreen.name)
                     }
                 }
@@ -91,21 +91,6 @@ fun LoginScreen(navController: NavHostController,
 
         }
 
-//        Spacer(modifier = Modifier.height(15.dp))
-//        Row(
-//            modifier = Modifier.padding(15.dp),
-//            horizontalArrangement = Arrangement.Center,
-//            verticalAlignment = Alignment.CenterVertically
-//        ){
-//            val text = if(showLoginForm.value) "Sign up" else "Login"
-//            Text(text = "New User?")
-//            Text(text,
-//            modifier = Modifier.clickable {
-//                showLoginForm.value = !showLoginForm.value
-//            }.padding(start = 5.dp),
-//            fontWeight = FontWeight.Bold,
-//            color = MaterialTheme.colors.secondaryVariant)
-//        }
     }
 }
 
