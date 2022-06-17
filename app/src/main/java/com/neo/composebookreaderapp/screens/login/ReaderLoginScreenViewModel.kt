@@ -1,6 +1,7 @@
 package com.neo.composebookreaderapp.screens.login
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,6 +24,7 @@ class ReaderLoginScreenViewModel: ViewModel() {
     private val _loading = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loading
 
+    // todo add Toast to show sign in error
     fun signInWithEmailAndPassword(email: String, password: String, home: () -> Unit)=
         viewModelScope.launch {
             // don't know why coroutine is used since firebase tasks run in background already
@@ -33,7 +35,7 @@ class ReaderLoginScreenViewModel: ViewModel() {
                         if(task.isSuccessful){
                             home()   // go to hoe screen
                         } else{
-                            Log.d("SignIn error", "SignIn failed : ${task.result}")
+                            Log.d("SignIn error", "SignIn failed : ${task.exception?.message}")
                         }
 
                         _loading.value = false
@@ -44,6 +46,7 @@ class ReaderLoginScreenViewModel: ViewModel() {
             }
         }
 
+    // todo add Toast to show sign up error
     fun createUserWithEmailAndPassword(email: String, password: String, home: () -> Unit){
         if(_loading.value == false){
             _loading.value = true
@@ -54,7 +57,7 @@ class ReaderLoginScreenViewModel: ViewModel() {
                         createUser(displayName)
                         home()
                     } else{
-                        Log.d("SignIn error", "SignIn failed : ${task.result}")
+                        Log.d("SignIn error", "SignIn failed : ${task.exception?.message}")
                     }
                 }
         }

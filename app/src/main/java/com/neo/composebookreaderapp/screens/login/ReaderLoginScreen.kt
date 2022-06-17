@@ -48,7 +48,6 @@ fun LoginScreen(navController: NavHostController,
     // if true show login form else, create account form
     val showLoginForm = rememberSaveable { mutableStateOf(true) }
 
-
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
