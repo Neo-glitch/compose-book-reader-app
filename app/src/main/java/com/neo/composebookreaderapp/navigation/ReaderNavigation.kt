@@ -44,7 +44,7 @@ fun ReaderNavigation() {
         }
 
         composable(ReaderScreens.DetailScreen.name){
-            BookDetailsScreen(navController)
+            BookDetailsScreen(navController, bookId = "")
         }
 
         composable(ReaderScreens.UpdateScreen.name){
