@@ -34,6 +34,7 @@ import com.neo.composebookreaderapp.components.InputField
 import com.neo.composebookreaderapp.components.ReaderAppBar
 import com.neo.composebookreaderapp.model.Item
 import com.neo.composebookreaderapp.model.MBook
+import com.neo.composebookreaderapp.navigation.ReaderScreens
 
 @Preview
 @Composable
@@ -102,7 +103,9 @@ fun BookList(
 @Composable
 fun BookRow(book: Item, navController: NavHostController) {
     Card(modifier = Modifier
-        .clickable { }
+        .clickable {
+            navController.navigate("${ReaderScreens.DetailScreen.name}/${book.id}")
+        }
         .fillMaxWidth()
         .heightIn(100.dp)
         .padding(3.dp),

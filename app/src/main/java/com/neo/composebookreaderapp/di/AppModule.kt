@@ -26,10 +26,10 @@ object AppModule {
             .create(BooksApi::class.java)
     }
 
-    // really no need for this, just following course
-    @Singleton
-    @Provides
-    fun provideBookRepository(api : BooksApi) = BookRepository(api)
+//    // really no need for this, just following course
+//    @Singleton
+//    @Provides
+//    fun provideBookRepository(api : BooksApi) = BookRepository(api)
 
 
 }
