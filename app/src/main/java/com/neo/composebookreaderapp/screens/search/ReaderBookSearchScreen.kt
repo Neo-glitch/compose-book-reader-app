@@ -29,11 +29,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.neo.composebookreaderapp.components.InputField
 import com.neo.composebookreaderapp.components.ReaderAppBar
 import com.neo.composebookreaderapp.model.Item
 import com.neo.composebookreaderapp.model.MBook
+import com.neo.composebookreaderapp.navigation.ReaderScreens
 
 @Preview
 @Composable
@@ -83,7 +85,10 @@ fun BookList(
 
     val listOfBooks = viewModel.list
     if(viewModel.isLoading){
-        LinearProgressIndicator()
+        Row (horizontalArrangement = Arrangement.SpaceBetween){
+            LinearProgressIndicator()
+            Text(text = "Loading...")
+        }
     } else{
         Log.d("BOOK LIST", "list size is: ${listOfBooks.size}")
 
@@ -99,12 +104,15 @@ fun BookList(
 
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun BookRow(book: Item, navController: NavHostController) {
     Card(modifier = Modifier
-        .clickable { }
+        .clickable {
+            navController.navigate("${ReaderScreens.DetailScreen.name}/${book.id}")
+        }
         .fillMaxWidth()
-        .heightIn(100.dp)
+        .height(100.dp)
         .padding(3.dp),
         shape = RectangleShape,
         elevation = 7.dp) {
@@ -113,8 +121,9 @@ fun BookRow(book: Item, navController: NavHostController) {
             verticalAlignment = Alignment.Top
         ) {
             // if smallThumbnail empty use the hard coded imageUrl
+
             val imageUrl: String =
-                if(book.volumeInfo.imageLinks.smallThumbnail.isNullOrEmpty()){
+                if(book.volumeInfo?.imageLinks?.smallThumbnail.isNullOrEmpty()){
                     "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F23%2F2022%2F02%2F08%2Ffinance-books-2022.jpg"
                 } else{
                      book.volumeInfo.imageLinks.smallThumbnail

@@ -3,9 +3,11 @@ package com.neo.composebookreaderapp.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.neo.composebookreaderapp.screens.ReaderSplashScreen
 import com.neo.composebookreaderapp.screens.details.BookDetailsScreen
 import com.neo.composebookreaderapp.screens.home.HomeScreen
@@ -14,6 +16,7 @@ import com.neo.composebookreaderapp.screens.search.ReaderBookSearchViewModel
 import com.neo.composebookreaderapp.screens.search.SearchScreen
 import com.neo.composebookreaderapp.screens.stats.StatsScreen
 import com.neo.composebookreaderapp.screens.update.BookUpdateScreen
+import java.io.Reader
 
 
 @ExperimentalComposeUiApi
@@ -43,8 +46,15 @@ fun ReaderNavigation() {
             SearchScreen(navController, viewModel)
         }
 
-        composable(ReaderScreens.DetailScreen.name){
-            BookDetailsScreen(navController)
+
+        composable("${ReaderScreens.DetailScreen.name}/{bookId}", arguments = listOf(navArgument(
+            "bookId"){
+            type = NavType.StringType
+        }
+        )){backStackEntry ->
+            backStackEntry.arguments?.getString("bookId").let { bookId ->
+                BookDetailsScreen(navController, bookId = bookId.toString())
+            }
         }
 
         composable(ReaderScreens.UpdateScreen.name){
