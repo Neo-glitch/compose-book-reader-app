@@ -36,7 +36,7 @@ class ReaderBookSearchViewModel @Inject constructor(private val repository: Book
     fun searchBooks(query: String) {
 
         // n.b: To fix issue with setting mutable State in Dispatchers.IO are;
-        // 1. to call this method in a launched effect
+        // 1. to call this method in a launched effect( And avoid calling this in the init block of this VM class)
         // 2. Or set to Context to Dispatchers.Main when setting value of the mutableState using withContext(Dispatchers.Main)
         // 3. change the mutable state in viewModel to mutableState flow and use collectAsState in composable
 
