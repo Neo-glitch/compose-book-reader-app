@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.neo.composebookreaderapp">
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- use clear text traffic allows android studio to make calls to less secure http traffic(not to be used in production app) -->
     <application
