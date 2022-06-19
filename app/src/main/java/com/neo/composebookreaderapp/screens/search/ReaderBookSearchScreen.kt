@@ -13,6 +13,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -79,33 +80,22 @@ fun BookList(
     viewModel: ReaderBookSearchViewModel = hiltViewModel()
 ) {
 
-//    if(viewModel.listOfBooks.value.loading == true){
-//        Log.d("LOAD", "loading ....")
-//        CircularProgressIndicator()
-//    } else {
-//        Log.d("LOAD", "BookList: ${viewModel.listOfBooks.value.data}")
-//    }
-//    val listOfBooks = listOf(
-//        MBook(id = "gfhfh", title = "Hell no", authors = "Schmizel", notes = null),
-//        MBook(id = "gfhfh", title = "Hell no", authors = "Schmizel", notes = null),
-//        MBook(id = "gfhfh", title = "Hell no", authors = "Schmizel", notes = null),
-//        MBook(id = "gfhfh", title = "Hell no", authors = "Schmizel", notes = null),
-//        MBook(id = "gfhfh", title = "Hell no", authors = "Schmizel", notes = null),
-//        MBook(id = "gfhfh", title = "Hell no", authors = "Schmizel", notes = null)
-//    )
-
     val listOfBooks = viewModel.list
-    Log.d("BOOK LIST", "list size is: ${listOfBooks.size}")
+    if(viewModel.isLoading){
+        LinearProgressIndicator()
+    } else{
+        Log.d("BOOK LIST", "list size is: ${listOfBooks.size}")
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp) // add margin each item
-    ) {
-        items(items = listOfBooks) { book ->
-            BookRow(book, navController)
-
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp) // add margin each item
+        ) {
+            items(items = listOfBooks) { book ->
+                BookRow(book, navController)
+            }
         }
     }
+
 }
 
 @Composable

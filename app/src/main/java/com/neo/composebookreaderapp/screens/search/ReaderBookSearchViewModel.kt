@@ -13,39 +13,17 @@ import com.neo.composebookreaderapp.model.Item
 import com.neo.composebookreaderapp.repository.BookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class ReaderBookSearchViewModel @Inject constructor(private val repository: BookRepository) :
-ViewModel(){
+    ViewModel() {
 
-    // previously used stuff
-//    val listOfBooks: MutableState<DataOrException<List<Item>, Boolean, Exception>> =
-//        mutableStateOf(DataOrException(null, false, Exception("")))
-//
-//
-//    init {
-//        searchBooks("messi")
-//    }
-//
-//    fun searchBooks(query: String) {
-//        //todo find way to make dispatchers.io as work with this
-//        viewModelScope.launch {
-//            if(query.isEmpty()) return@launch
-//
-//            listOfBooks.value.loading = true
-//            listOfBooks.value = repository.getBooks(query)
-//            if(listOfBooks.value.data.toString().isNotEmpty()
-//                    ){
-//                listOfBooks.value.loading = false
-//                Log.d("LOAD_VM", "list of books: ${listOfBooks.value.data.toString()}")
-//            }
-//
-//        }
-//    }
-
-    var list: List<Item> by mutableStateOf(listOf()) // to hold list of books
+    var list: List<Item> by mutableStateOf(listOf()) // to hold list of books(it's a state also)
+    var isLoading: Boolean by mutableStateOf(true)  // to track loading(it's a state also)
 
     init {
         loadBooks()
@@ -56,20 +34,35 @@ ViewModel(){
     }
 
     fun searchBooks(query: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            if(query.isEmpty()) return@launch
 
-            try{
-                when(val response = repository.getBooks(query)){
+        // n.b: To fix issue with setting mutable State in Dispatchers.IO are;
+        // 1. to call this method in a launched effect
+        // 2. Or set to Context to Dispatchers.Main when setting value of the mutableState using withContext(Dispatchers.Main)
+        // 3. change the mutable state in viewModel to mutableState flow and use collectAsState in composable
+
+        viewModelScope.launch(Dispatchers.IO) {
+            if (query.isEmpty()) return@launch
+            try {
+                withContext(Dispatchers.Main){isLoading = true}
+                when (val response = repository.getBooks(query)) {
                     is Resource.Success -> {
                         list = response.data!!
+                        if (list.isNotEmpty())
+                            withContext(Dispatchers.Main){isLoading = false}
                         Log.d("RESPONSE", "response: ${list.size}")
                     }
-                    is Resource.Error -> Log.e("ERROR", "searchBooks: Failed getting books")
-                    else -> {}
+                    is Resource.Error -> {
+                        withContext(Dispatchers.Main){isLoading = false}
+                        Log.e("ERROR", "searchBooks: Failed getting books")
+                    }
+                    else -> {
+                        withContext(Dispatchers.Main){isLoading = false}
+                    }
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main){isLoading = false}
                 Log.e("ERROR_IN_CATCH", "searchBooks: ${e.message.toString()}")
+
             }
         }
     }
