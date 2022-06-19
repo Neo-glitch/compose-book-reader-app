@@ -1,12 +1,9 @@
 package com.neo.composebookreaderapp.screens.home
 
 import android.widget.HorizontalScrollView
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -40,17 +37,20 @@ import com.neo.composebookreaderapp.navigation.ReaderScreens
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
-
+    val scrollState = rememberScrollState()
     Scaffold(topBar = {
         ReaderAppBar(title = "Book reader", navController = navController)
     },
         floatingActionButton = {
             FABContent {
+                navController.navigate(ReaderScreens.SearchScreen.name)
 
             }
         }) {
 
-        Surface(modifier = Modifier.fillMaxSize()) {
+        Surface(modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)) {
             HomeContent(navController)
         }
 

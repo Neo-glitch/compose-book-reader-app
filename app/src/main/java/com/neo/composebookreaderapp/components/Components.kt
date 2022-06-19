@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -157,8 +158,10 @@ fun TitleSection(modifier: Modifier = Modifier, label: String) {
 @Composable
 fun ReaderAppBar(
     title: String,
+    icon : ImageVector? = null,
     showProfile: Boolean = true,
-    navController: NavHostController
+    navController: NavHostController,
+    onBackArrowClicked : () -> Unit = {}
 ) {
     TopAppBar(
         title = {
@@ -174,6 +177,13 @@ fun ReaderAppBar(
                     )
                 }
 
+                icon?.let {
+                    Icon(imageVector = icon, contentDescription = "arrow back",
+                    tint = Color.Red.copy(0.7f),
+                    modifier = Modifier.clickable { onBackArrowClicked.invoke() })
+
+                    Spacer(modifier = Modifier.width(40.dp))
+                }
                 Text(
                     text = title, color = Color.Red.copy(0.7f),
                     style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
@@ -190,11 +200,16 @@ fun ReaderAppBar(
                     navController.navigate(ReaderScreens.LoginScreen.name)
                 }
             }) {
-                Icon(
-                    imageVector = Icons.Filled.Logout,
-                    contentDescription = "Logout Icon",
-                    tint = Color.Green.copy(0.4f)
-                )
+                if(showProfile)
+                    Row() {
+                        Icon(
+                            imageVector = Icons.Filled.Logout,
+                            contentDescription = "Logout Icon",
+                            tint = Color.Green.copy(0.4f)
+                        )
+                    }
+                else Box(){}
+
 
             }
 
@@ -273,7 +288,7 @@ fun ListCard(
             Row(horizontalArrangement = Arrangement.Center) {
 
                 Image(
-                    painter = rememberImagePainter(data = ""),
+                    painter = rememberImagePainter(data = "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F23%2F2022%2F02%2F08%2Ffinance-books-2022.jpg"),
                     contentDescription = "book image",
                     modifier = Modifier
                         .height(140.dp)
