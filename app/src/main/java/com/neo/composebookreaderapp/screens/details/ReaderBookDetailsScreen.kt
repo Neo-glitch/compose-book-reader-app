@@ -163,7 +163,7 @@ fun ShowDetails(bookInfo: Resource<Item>, navController: NavHostController) {
                     description = bookData.description,
                     categories = bookData.categories.toString(),
                     notes = "",
-                    photoUrl = bookData.publishedDate,
+                    photoUrl = bookData.imageLinks.thumbnail,
                     pageCount = bookData.pageCount.toString(),
                     rating = 0.0,
                     googleBookId = googleBookId,
