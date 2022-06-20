@@ -28,12 +28,13 @@ class ReaderHomeViewModel @Inject constructor(private val repository: FireReposi
         getAllBooksFromDatabase()
     }
 
-    fun getAllBooksFromDatabase(){
+    private fun getAllBooksFromDatabase(){
         viewModelScope.launch(Dispatchers.IO) {
             withContext(Dispatchers.Main){data.value.loading = true}
 
             data.value = repository.getAllBooksFromDatabase()
-            if(!data.value.data.isNullOrEmpty())
+            if(!data.value.data.isNullOrEmpty() ||
+                !data.value.exception.toString().isNullOrEmpty())
                 withContext(Dispatchers.Main){data.value.loading = false}
             Log.d("GET BOOKS", "Get books from fb: ${data.value.data?.toList()?.toString()}")
         }
