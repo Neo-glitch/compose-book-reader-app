@@ -1,9 +1,7 @@
 package com.neo.composebookreaderapp.di
 
-import com.google.firebase.firestore.FirebaseFirestore
 import com.neo.composebookreaderapp.network.BooksApi
 import com.neo.composebookreaderapp.repository.BookRepository
-import com.neo.composebookreaderapp.repository.FireRepository
 import com.neo.composebookreaderapp.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -20,7 +18,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideBookApi(): BooksApi {
+    fun provideBookApi(): BooksApi{
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -33,10 +31,5 @@ object AppModule {
 //    @Provides
 //    fun provideBookRepository(api : BooksApi) = BookRepository(api)
 
-    @Singleton
-    @Provides
-    fun provideFireBookRepository() = FireRepository(
-        queryBook = FirebaseFirestore.getInstance().collection("books")
-    )
 
 }
