@@ -257,10 +257,10 @@ fun BookRating(score: Double = 4.5) {
     }
 }
 
-@Preview
+
 @Composable
 fun ListCard(
-    book: MBook = MBook("fhh", "running", "neo", "hell boy"),
+    book: MBook,
     onPressDetails: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
@@ -278,7 +278,7 @@ fun ListCard(
             .padding(16.dp)
             .height(242.dp)
             .width(202.dp)
-            .clickable { onPressDetails(book.title!!) }
+            .clickable { onPressDetails(book.id!!) }
     ) {
 
         Column(
@@ -288,7 +288,7 @@ fun ListCard(
             Row(horizontalArrangement = Arrangement.Center) {
 
                 Image(
-                    painter = rememberImagePainter(data = "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F23%2F2022%2F02%2F08%2Ffinance-books-2022.jpg"),
+                    painter = rememberImagePainter(data = book.photoUrl.toString()),
                     contentDescription = "book image",
                     modifier = Modifier
                         .height(140.dp)
