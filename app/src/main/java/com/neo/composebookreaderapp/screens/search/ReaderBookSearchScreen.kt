@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.neo.composebookreaderapp.components.BookRow
 import com.neo.composebookreaderapp.components.InputField
 import com.neo.composebookreaderapp.components.ReaderAppBar
 import com.neo.composebookreaderapp.model.Item
@@ -52,8 +53,10 @@ fun SearchScreen(
                 navController = navController,
                 showProfile = false
             ) {
-                navController.popBackStack()
-//                navController.navigate(ReaderScreens.ReaderHomeScreen.name)
+//                navController.popBackStack()
+                navController.navigate(ReaderScreens.ReaderHomeScreen.name){
+                    popUpTo(0)
+                }
             }
         }
     ) {
@@ -104,63 +107,7 @@ fun BookList(
 
 }
 
-@OptIn(ExperimentalCoilApi::class)
-@Composable
-fun BookRow(book: Item, navController: NavHostController) {
-    Card(modifier = Modifier
-        .clickable {
-            navController.navigate("${ReaderScreens.DetailScreen.name}/${book.id}")
-        }
-        .fillMaxWidth()
-        .height(100.dp)
-        .padding(3.dp),
-        shape = RectangleShape,
-        elevation = 7.dp) {
-        Row(
-            modifier = Modifier.padding(5.dp),
-            verticalAlignment = Alignment.Top
-        ) {
-            // if smallThumbnail empty use the hard coded imageUrl
 
-            val imageUrl: String =
-                if(book.volumeInfo?.imageLinks?.smallThumbnail.isNullOrEmpty()){
-                    "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F23%2F2022%2F02%2F08%2Ffinance-books-2022.jpg"
-                } else{
-                     book.volumeInfo.imageLinks.smallThumbnail
-                }
-
-            Image(
-                painter = rememberImagePainter(data = imageUrl),
-                contentDescription = "book image",
-                modifier = Modifier
-                    .width(80.dp)
-                    .fillMaxHeight()
-                    .padding(end = 4.dp)
-            )
-            Column() {
-                Text(text = book.volumeInfo.title, overflow = TextOverflow.Ellipsis)
-                Text(
-                    text = "Author: ${book.volumeInfo.authors}", overflow = TextOverflow.Clip,
-                    fontStyle = FontStyle.Italic,
-                    style = MaterialTheme.typography.caption
-                )
-
-                Text(
-                    text = "Date: ${book.volumeInfo.publishedDate}", overflow = TextOverflow.Clip,
-                    fontStyle = FontStyle.Italic,
-                    style = MaterialTheme.typography.caption
-                )
-
-                Text(
-                    text = "${book.volumeInfo.categories}", overflow = TextOverflow.Clip,
-                    fontStyle = FontStyle.Italic,
-                    style = MaterialTheme.typography.caption
-                )
-            }
-        }
-
-    }
-}
 
 @Composable
 fun SearchForm(

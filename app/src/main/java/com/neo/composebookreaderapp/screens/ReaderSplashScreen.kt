@@ -47,7 +47,9 @@ fun ReaderSplashScreen(navController: NavHostController) {
         // check should be in a viewModel
         val route = if (Firebase.auth.currentUser?.email.isNullOrEmpty())
             ReaderScreens.LoginScreen.name else ReaderScreens.ReaderHomeScreen.name
-        navController.navigate(route)
+        navController.navigate(route){
+            popUpTo(0)
+        }
     }
 
     Surface(
