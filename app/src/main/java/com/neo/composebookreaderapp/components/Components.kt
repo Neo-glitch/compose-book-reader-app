@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
@@ -38,10 +39,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.neo.composebookreaderapp.R
+import com.neo.composebookreaderapp.model.Item
 import com.neo.composebookreaderapp.model.MBook
 import com.neo.composebookreaderapp.navigation.ReaderScreens
 
@@ -165,10 +168,10 @@ fun TitleSection(modifier: Modifier = Modifier, label: String) {
 @Composable
 fun ReaderAppBar(
     title: String,
-    icon : ImageVector? = null,
+    icon: ImageVector? = null,
     showProfile: Boolean = true,
     navController: NavHostController,
-    onBackArrowClicked : () -> Unit = {}
+    onBackArrowClicked: () -> Unit = {}
 ) {
     TopAppBar(
         title = {
@@ -186,8 +189,8 @@ fun ReaderAppBar(
 
                 icon?.let {
                     Icon(imageVector = icon, contentDescription = "arrow back",
-                    tint = Color.Red.copy(0.7f),
-                    modifier = Modifier.clickable { onBackArrowClicked.invoke() })
+                        tint = Color.Red.copy(0.7f),
+                        modifier = Modifier.clickable { onBackArrowClicked.invoke() })
 
                     Spacer(modifier = Modifier.width(40.dp))
                 }
@@ -207,7 +210,7 @@ fun ReaderAppBar(
                     navController.navigate(ReaderScreens.LoginScreen.name)
                 }
             }) {
-                if(showProfile)
+                if (showProfile)
                     Row() {
                         Icon(
                             imageVector = Icons.Filled.Logout,
@@ -215,7 +218,7 @@ fun ReaderAppBar(
                             tint = Color.Green.copy(0.4f)
                         )
                     }
-                else Box(){}
+                else Box() {}
 
 
             }
@@ -315,7 +318,7 @@ fun ListCard(
                         Modifier.padding(bottom = 1.dp)
                     )
 
-                    BookRating(score = 3.5)
+                    BookRating(score = book.rating!!)
 
                 }
             }
@@ -335,13 +338,17 @@ fun ListCard(
 
         }
 
+        val isStartedReading = remember { mutableStateOf(false) }
 
         Row(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.Bottom
         )
         {
-            RoundedButton("Reading", 70)
+            isStartedReading.value = book.startedReading != null
+            RoundedButton(
+                if (isStartedReading.value) "Reading" else "Not Read", 70
+            )
 
         }
 
@@ -349,8 +356,6 @@ fun ListCard(
     }
 
 }
-
-
 
 
 @Preview
@@ -433,12 +438,71 @@ fun RatingBar(
                         true
                     },
                 tint = if (i <= ratingState)
-                    // if rating is 3, then color to yellow from 3 to 1 and ignore rest
+                // if rating is 3, then color to yellow from 3 to 1 and ignore rest
                     Color(0xFFFFD700)
                 else
                     Color(0xFFA2ADB1)
             )
         }
+    }
+}
+
+
+@OptIn(ExperimentalCoilApi::class)
+@Composable
+fun BookRow(book: Item, navController: NavHostController) {
+    Card(modifier = Modifier
+        .clickable {
+            navController.navigate("${ReaderScreens.DetailScreen.name}/${book.id}")
+        }
+        .fillMaxWidth()
+        .height(100.dp)
+        .padding(3.dp),
+        shape = RectangleShape,
+        elevation = 7.dp) {
+        Row(
+            modifier = Modifier.padding(5.dp),
+            verticalAlignment = Alignment.Top
+        ) {
+            // if smallThumbnail empty use the hard coded imageUrl
+
+            val imageUrl: String =
+                if(book.volumeInfo?.imageLinks?.smallThumbnail.isNullOrEmpty()){
+                    "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F23%2F2022%2F02%2F08%2Ffinance-books-2022.jpg"
+                } else{
+                    book.volumeInfo.imageLinks.smallThumbnail
+                }
+
+            Image(
+                painter = rememberImagePainter(data = imageUrl),
+                contentDescription = "book image",
+                modifier = Modifier
+                    .width(80.dp)
+                    .fillMaxHeight()
+                    .padding(end = 4.dp)
+            )
+            Column() {
+                Text(text = book.volumeInfo.title, overflow = TextOverflow.Ellipsis)
+                Text(
+                    text = "Author: ${book.volumeInfo.authors}", overflow = TextOverflow.Clip,
+                    fontStyle = FontStyle.Italic,
+                    style = MaterialTheme.typography.caption
+                )
+
+                Text(
+                    text = "Date: ${book.volumeInfo.publishedDate}", overflow = TextOverflow.Clip,
+                    fontStyle = FontStyle.Italic,
+                    style = MaterialTheme.typography.caption
+                )
+
+                Text(
+                    text = "${book.volumeInfo.categories}", overflow = TextOverflow.Clip,
+                    fontStyle = FontStyle.Italic,
+                    style = MaterialTheme.typography.caption
+                )
+            }
+        }
+
     }
 }
 
