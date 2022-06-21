@@ -64,13 +64,12 @@ fun StatsScreen(
 
             Column {
 
-                Row {
+                Row (verticalAlignment = Alignment.CenterVertically){
                     Box(
                         modifier = Modifier
                             .size(45.dp)
-                            .padding(2.dp)
+                            .padding(10.dp)
                     ) {
-
                         Icon(imageVector = Icons.Sharp.Person, contentDescription = "icon")
                     }
 
